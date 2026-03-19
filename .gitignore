@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.venv/
+venv/
+env/
+__pycache__/
+
+# Testing
+coverage/
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Env Files (CRITICAL)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*
+
+# Secrets & Keys (CRITICAL)
+*.pem
+*.key
+private_keys/
+secrets/
+
+# Misc
+.DS_Store
+*.log
+
+# Python
+*.pyc
+
+# Hardhat
+cache/
+artifacts/
