@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+  scanner_api:
+    build: 
+      context: ./scanner
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - ANTIGRAVITY_API_KEY=${ANTIGRAVITY_API_KEY}
+    depends_on:
+      - redis
+    volumes:
+      - ./scanner:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  scanner_worker:
+    build:
+      context: ./scanner
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - ANTIGRAVITY_API_KEY=${ANTIGRAVITY_API_KEY}
+    depends_on:
+      - redis
+    volumes:
+      - ./scanner:/app
+    command: python -m queue.worker
+
+volumes:
+  redis_data:
