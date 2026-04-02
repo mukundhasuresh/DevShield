@@ -25,7 +25,7 @@ const container = {
 
 const item = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 300, damping: 24 } }
 };
 
 const getScoreColor = (score: number) => {
@@ -100,16 +100,12 @@ export function ScanDetailClient({ scan, vulnerabilities }: ScanDetailClientProp
           </div>
         </div>
         <div className="flex space-x-3">
-          <Button variant="outline" className="bg-[#111] border-[#222] hover:bg-[#1a1a1a]" asChild>
-            <a href={githubUrl} target="_blank" rel="noopener noreferrer">
-              <Github className="mr-2 h-4 w-4" /> View PR
-            </a>
+          <Button variant="outline" className="bg-[#111] border-[#222] hover:bg-[#1a1a1a]" onClick={() => window.open(githubUrl, '_blank')}>
+             <Github className="mr-2 h-4 w-4" /> View PR
           </Button>
           {polygonUrl && (
-            <Button variant="outline" className="bg-[#111] border-[#222] hover:bg-[#1a1a1a] text-[#8b5cf6] hover:text-[#7c3aed]" asChild>
-              <a href={polygonUrl} target="_blank" rel="noopener noreferrer">
-                <LinkIcon className="mr-2 h-4 w-4" /> Verify On-Chain
-              </a>
+            <Button variant="outline" className="bg-[#111] border-[#222] hover:bg-[#1a1a1a] text-[#8b5cf6] hover:text-[#7c3aed]" onClick={() => window.open(polygonUrl, '_blank')}>
+               <LinkIcon className="mr-2 h-4 w-4" /> Verify On-Chain
             </Button>
           )}
         </div>
