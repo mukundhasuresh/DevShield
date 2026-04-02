@@ -1,8 +1,19 @@
 import { ScansDataTable } from "@/components/dashboard/ScansDataTable";
+import { createServerClient } from "@/lib/supabase";
 
 export default async function ScansPage() {
-  // Artificial network delay to observe custom Skeleton states gracefully
-  await new Promise((resolve) => setTimeout(resolve, 600));
+  const supabase = createServerClient();
+  const { data: dbScans } = await supabase.from('scans').select(`*, repositories(full_name)`).order('created_at', { ascending: false });
+
+  const mappedScans = (dbScans || []).map(s => ({
+    id: s.id,
+    repo: s.repositories?.full_name || 'unknown',
+    pr: `#${s.pr_number}`,
+    status: s.status,
+    score: s.risk_score,
+    time: new Date(s.created_at).toLocaleDateString(),
+    severity: s.risk_score !== null && s.risk_score <= 30 ? "CRITICAL" : s.risk_score && s.risk_score < 70 ? "HIGH" : "LOW"
+  }));
 
   return (
     <div className="flex flex-col space-y-6">
@@ -12,7 +23,7 @@ export default async function ScansPage() {
       </div>
 
       <div className="pt-2">
-        <ScansDataTable />
+        <ScansDataTable initialScans={mappedScans} />
       </div>
     </div>
   );
