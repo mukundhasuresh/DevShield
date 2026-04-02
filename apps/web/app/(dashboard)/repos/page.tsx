@@ -1,8 +1,17 @@
 import { RepoList } from "@/components/dashboard/RepoList";
+import { createServerClient } from "@/lib/supabase";
 
 export default async function ReposPage() {
-  // Artificial network delay to observe custom Skeleton states gracefully
-  await new Promise((resolve) => setTimeout(resolve, 600));
+  const supabase = createServerClient();
+  const { data: dbRepos } = await supabase.from('repositories').select('*').order('created_at', { ascending: false });
+
+  const formattedRepos = (dbRepos || []).map(r => ({
+    id: r.id,
+    name: r.full_name,
+    enabled: r.scanning_enabled !== false,
+    lastScan: "Ready",
+    branch: "main" // GitHub webhook API usually omits branch on standard repository listing, could be resolved if stored
+  }));
 
   return (
     <div className="flex flex-col space-y-6">
@@ -12,7 +21,7 @@ export default async function ReposPage() {
       </div>
 
       <div className="pt-2">
-        <RepoList />
+        <RepoList initialRepos={formattedRepos} />
       </div>
     </div>
   );
