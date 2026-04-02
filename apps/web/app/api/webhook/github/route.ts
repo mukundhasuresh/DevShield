@@ -57,6 +57,62 @@ export async function POST(request: Request) {
     }
   }
   
+  // Route handled: GitHub App Installations
+  if (event === "installation" || event === "installation_repositories") {
+    const { createAdminClient } = await import('@/lib/supabase');
+    const supabase = createAdminClient();
+    const installationId = payload.installation.id;
+    const account = payload.installation.account;
+
+    let orgId = null;
+    if (payload.action !== "deleted") {
+      // Upsert the org
+      const { data: org, error: orgError } = await supabase.from('organizations').upsert(
+        {
+          github_installation_id: installationId,
+          github_login: account.login,
+          github_type: account.type.toLowerCase()
+        },
+        { onConflict: 'github_installation_id' }
+      ).select('id').single();
+  
+      if (orgError) {
+        console.error("Org upsert error:", orgError);
+      } else if (org) {
+        orgId = org.id;
+      }
+    }
+
+    // Process added repos
+    if ((payload.action === "created" || payload.action === "added") && orgId) {
+      const repos = payload.repositories || payload.repositories_added || [];
+      const repoPayloads = repos.map((repo: any) => ({
+        org_id: orgId,
+        github_repo_id: repo.id,
+        full_name: repo.full_name,
+      }));
+      if (repoPayloads.length > 0) {
+        await supabase.from('repositories').upsert(repoPayloads, { onConflict: 'github_repo_id' });
+      }
+    }
+
+    // Process removed repos
+    if (payload.action === "removed" && orgId) {
+      const repos = payload.repositories_removed || [];
+      for (const repo of repos) {
+        await supabase.from('repositories').delete().match({ github_repo_id: repo.id });
+      }
+    }
+
+    // Process uninstall
+    if (payload.action === "deleted") {
+      // Deleting the org cascades safely or we manually clean up if needed
+      await supabase.from('organizations').delete().match({ github_installation_id: installationId });
+    }
+
+    return NextResponse.json({ status: "installation_synced" }, { status: 200 });
+  }
+
   // Default success for ignored events/actions (e.g. issue_comment)
   return NextResponse.json({ status: "ignored", event, action: payload.action }, { status: 200 });
 }
