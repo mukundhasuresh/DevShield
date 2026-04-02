@@ -168,8 +168,16 @@ async def _process_job(job):
     # 8. Store in Supabase
     if supabase:
         try:
+            repo_uuid = None
+            repo_id_raw = data.get("repoId")
+            if repo_id_raw:
+                repo_res = supabase.table("repositories").select("id").eq("github_repo_id", repo_id_raw).execute()
+                if repo_res.data:
+                    repo_uuid = repo_res.data[0]["id"]
+
             # Create the scan record
             scan_record = supabase.table("scans").insert({
+                "repo_id": repo_uuid,
                 "pr_number": pr_number,
                 "pr_title": data.get("prTitle", "Untitled"),
                 "pr_author": data.get("author", "unknown"),
