@@ -15,21 +15,23 @@ import { motion } from "framer-motion";
 import { CheckCircle2, Clock, XCircle, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const MOCK_SCANS = [
-  { id: "1", repo: "acme/auth-service", pr: "#142", status: "complete", score: 85, time: "10 min ago", severity: "HIGH" },
-  { id: "2", repo: "acme/payment-api", pr: "#55", status: "scanning", score: null, time: "Just now", severity: "NONE" },
-  { id: "3", repo: "acme/web-frontend", pr: "#891", status: "failed", score: 0, time: "1 hr ago", severity: "CRITICAL" },
-  { id: "4", repo: "acme/data-pipeline", pr: "#12", status: "complete", score: 32, time: "2 hrs ago", severity: "MEDIUM" },
-  { id: "5", repo: "acme/core-infra", pr: "#4", status: "complete", score: 100, time: "5 hrs ago", severity: "NONE" },
-  { id: "6", repo: "acme/auth-service", pr: "#141", status: "complete", score: 90, time: "1 day ago", severity: "LOW" },
-  { id: "7", repo: "acme/web-frontend", pr: "#890", status: "complete", score: 45, time: "2 days ago", severity: "HIGH" },
-];
+interface ScanData {
+  id: string;
+  repo: string;
+  pr: string;
+  status: string;
+  score: number | null;
+  time: string;
+  severity: string;
+}
 
-export function ScansDataTable() {
+export function ScansDataTable({ initialScans = [] }: { initialScans?: ScanData[] }) {
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
 
-  const filteredScans = MOCK_SCANS.filter(scan => {
+  const displayScans = initialScans.length > 0 ? initialScans : [];
+
+  const filteredScans = displayScans.filter(scan => {
     const matchesSearch = scan.repo.toLowerCase().includes(search.toLowerCase()) || scan.pr.includes(search);
     const matchesFilter = filter === "all" || scan.status === filter || scan.severity.toLowerCase() === filter;
     return matchesSearch && matchesFilter;
@@ -122,7 +124,7 @@ export function ScansDataTable() {
           </div>
           
           <div className="flex items-center justify-between mt-4">
-            <span className="text-xs text-muted-foreground font-medium">Showing {filteredScans.length} of {MOCK_SCANS.length} results</span>
+            <span className="text-xs text-muted-foreground font-medium">Showing {filteredScans.length} of {displayScans.length} results</span>
             <div className="flex items-center space-x-2">
               <Button variant="outline" size="sm" disabled className="h-8 bg-[#111111] border-[#222222] text-muted-foreground">Previous</Button>
               <Button variant="outline" size="sm" className="h-8 bg-[#161616] border-[#222222] text-foreground hover:bg-[#222222] transition-colors">Next</Button>
