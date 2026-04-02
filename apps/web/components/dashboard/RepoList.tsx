@@ -6,16 +6,18 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { motion } from "framer-motion";
 import { Shield, ShieldOff, GitFork } from "lucide-react";
 
-const INITIAL_REPOS = [
-  { id: "1", name: "acme/payment-api", enabled: true, lastScan: "10 min ago", branch: "main" },
-  { id: "2", name: "acme/auth-service", enabled: true, lastScan: "1 hr ago", branch: "master" },
-  { id: "3", name: "acme/web-frontend", enabled: false, lastScan: "Never", branch: "main" },
-  { id: "4", name: "acme/data-pipeline", enabled: true, lastScan: "2 hrs ago", branch: "develop" },
-  { id: "5", name: "acme/core-infra", enabled: false, lastScan: "Never", branch: "main" }
-];
+interface RepoListProps {
+  initialRepos: {
+    id: string;
+    name: string;
+    enabled: boolean;
+    lastScan: string;
+    branch: string;
+  }[];
+}
 
-export function RepoList() {
-  const [repos, setRepos] = useState(INITIAL_REPOS);
+export function RepoList({ initialRepos }: RepoListProps) {
+  const [repos, setRepos] = useState(initialRepos);
 
   const toggleRepo = (id: string) => {
     setRepos(repos.map(r => r.id === id ? { ...r, enabled: !r.enabled } : r));
