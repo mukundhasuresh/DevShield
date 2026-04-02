@@ -20,6 +20,30 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "DevShield - AI-Powered DevSecOps",
   description: "DevShield is a B2B SaaS GitHub App that automatically scans every Pull Request for security vulnerabilities using AI.",
+  icons: {
+    icon: "/favicon.ico",
+  },
+  openGraph: {
+    title: "DevShield",
+    description: "AI-Powered DevSecOps seamlessly integrated into your workflows.",
+    url: "https://devshield.app",
+    siteName: "DevShield",
+    images: [
+      {
+        url: "https://devshield.app/og-image.jpg",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DevShield",
+    description: "AI-Powered DevSecOps natively merged.",
+    images: ["https://devshield.app/og-image.jpg"],
+  },
 };
 
 export default function RootLayout({

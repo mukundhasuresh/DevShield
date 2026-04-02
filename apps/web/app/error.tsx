@@ -31,8 +31,8 @@ export default function ErrorBoundary({
         <Button onClick={() => reset()} className="bg-foreground text-background hover:bg-[#ededed]/90 h-11 px-8 rounded-full font-medium">
           <RefreshCcw className="mr-2 h-4 w-4" /> Try Again
         </Button>
-        <Button variant="outline" asChild className="border-[#222222] bg-[#111111] hover:bg-[#1a1a1a] h-11 px-8 rounded-full">
-          <a href="/">Return to Base</a>
+        <Button variant="outline" className="border-[#222222] bg-[#111111] hover:bg-[#1a1a1a] h-11 px-8 rounded-full" onClick={() => window.location.href = '/'}>
+          Return to Base
         </Button>
       </div>
       <div className="mt-12 text-xs font-mono text-[#333333]">

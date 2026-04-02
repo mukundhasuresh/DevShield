@@ -20,8 +20,8 @@ export default function NotFound() {
         <p className="text-muted-foreground text-md max-w-sm mb-8">
           The requested coordinate does not exist within the DevShield secure boundary.
         </p>
-        <Button asChild className="bg-foreground text-background hover:bg-[#ededed]/90 h-11 px-8 rounded-full font-medium">
-          <Link href="/">Return to Dashboard</Link>
+        <Button onClick={() => window.location.href = '/dashboard'} className="bg-foreground text-background hover:bg-[#ededed]/90 h-11 px-8 rounded-full font-medium">
+          Return to Dashboard
         </Button>
       </div>
     </div>
