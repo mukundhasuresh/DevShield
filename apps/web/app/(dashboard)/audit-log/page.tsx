@@ -1,5 +1,5 @@
 import { AuditLogTable } from "@/components/dashboard/AuditLogTable";
-import { createServerClient } from "@/lib/supabase";
+import { createServerClient } from "@/lib/supabase-server";
 
 export default async function AuditLogPage() {
   const supabase = createServerClient();

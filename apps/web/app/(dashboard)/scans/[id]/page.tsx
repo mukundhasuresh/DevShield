@@ -1,4 +1,4 @@
-import { createServerClient } from "@/lib/supabase";
+import { createServerClient } from "@/lib/supabase-server";
 import { ScanDetailClient } from "@/components/dashboard/ScanDetailClient";
 import { notFound } from "next/navigation";
 

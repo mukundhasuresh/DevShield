@@ -1,5 +1,5 @@
 import { ScansDataTable } from "@/components/dashboard/ScansDataTable";
-import { createServerClient } from "@/lib/supabase";
+import { createServerClient } from "@/lib/supabase-server";
 
 export default async function ScansPage() {
   const supabase = createServerClient();

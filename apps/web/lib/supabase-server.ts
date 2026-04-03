@@ -1,5 +1,4 @@
 import { createServerClient as _createServerClient, type CookieOptions } from '@supabase/ssr'
-import { createClient as _createBrowserClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 
 export function createServerClient() {
@@ -28,27 +27,6 @@ export function createServerClient() {
           }
         },
       },
-    }
-  )
-}
-
-export function createBrowserClient() {
-  return _createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
-}
-
-// For service-role operations (e.g. webhook handler inserts)
-export function createAdminClient() {
-  return _createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false
-      }
     }
   )
 }

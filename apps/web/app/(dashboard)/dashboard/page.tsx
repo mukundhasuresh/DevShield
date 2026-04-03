@@ -1,4 +1,4 @@
-import { createServerClient } from "@/lib/supabase";
+import { createServerClient } from "@/lib/supabase-server";
 import { RiskScoreCard } from "@/components/dashboard/RiskScoreCard";
 import { SeverityDonut } from "@/components/dashboard/SeverityDonut";
 import { VulnerabilityTrend } from "@/components/dashboard/VulnerabilityTrend";

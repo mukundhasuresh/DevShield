@@ -59,7 +59,7 @@ export async function POST(request: Request) {
   
   // Route handled: GitHub App Installations
   if (event === "installation" || event === "installation_repositories") {
-    const { createAdminClient } = await import('@/lib/supabase');
+    const { createAdminClient } = await import('@/lib/supabase-client');
     const supabase = createAdminClient();
     const installationId = payload.installation.id;
     const account = payload.installation.account;
